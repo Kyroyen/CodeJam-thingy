@@ -1,7 +1,15 @@
 from geopy import distance
-import pandas as pd
+from geopy.geocoders import Nominatim
+from urllib.parse import urlencode
 import requests
+import pandas as pd
 import math
+import dotenv
+import os
+
+dotenv.load_dotenv()
+geolocator = Nominatim(user_agent="CodeJamProject")
+openrouteservice_api_key = os.getenv('OPENROUTESERVICE_API_KEY')
 
 
 class Database:
@@ -21,6 +29,15 @@ class Database:
 
         except IndexError:
             raise ValueError(f"City {city_name} not found in dataset")
+
+
+def fetch_city_geocode(city: str) -> (float, float):
+    geocode_data = geolocator.geocode(city)
+    if geocode_data:
+        lat, lon = geocode_data.latitude, geocode_data.longitude
+        return (lat, lon)
+    else:
+        raise ValueError("Could not get city geocode")
 
 
 def degrees_to_radians(deg: float) -> float:
@@ -50,8 +67,30 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
     return chord_len
 
 
-def road_distance(city1: str, city2: str) -> float:
-    pass
+def road_distance(coords1: (float, float), coords2: (float, float)) -> float | None:
+
+    start_coords = '{},{}'.format(*coords1)
+    end_coords = '{},{}'.format(*coords2)
+
+    api_url = "https://api.openrouteservice.org/v2/directions/driving-car"
+    params = {
+        'api_key': openrouteservice_api_key,
+        'start': start_coords,
+        'end': end_coords
+    }
+
+    url = api_url + '?' + urlencode(params)
+
+    try:
+        response = requests.get(url)
+        data = response.json()
+        print(data)
+        distance = data['features'][0]['properties']['segments'][0]['distance']
+        return distance / 1000
+
+    except Exception as e:
+        print("openrouteservice error:", e)
+        return None
 
 
 if __name__ == "__main__":
@@ -70,12 +109,18 @@ if __name__ == "__main__":
 
     city2 = input("\nEnter name of another city: ")
 
-    coords1 = Database.get_coordinates(city)
-    coords2 = Database.get_coordinates(city2)
+    # coords1 = Database.get_coordinates(city)
+    # coords2 = Database.get_coordinates(city2)
+
+    coords1 = fetch_city_geocode(city)
+    coords2 = fetch_city_geocode(city2)
 
     print("ground distance b/w them is: {}".format(
         ground_distance(coords1, coords2)
     ))
     print("spatial distance b/w them is: {}".format(
         spatial_distance(coords1, coords2)
+    ))
+    print("road distance b/w them is: {}".format(
+        road_distance(coords1, coords2)
     ))
