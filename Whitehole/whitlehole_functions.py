@@ -1,10 +1,12 @@
 from typing import List
 
 
-class BlackFunction:
+class WhiteFunction:
 
     def __init__(
         self,
         messages: List[str]
     ) -> None:
         self.messages = messages
+
+    #add functions here
