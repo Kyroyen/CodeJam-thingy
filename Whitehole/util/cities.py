@@ -1,5 +1,7 @@
+from geopy import distance
 import pandas as pd
 import requests
+import math
 
 
 class Database:
@@ -21,6 +23,37 @@ class Database:
             raise ValueError(f"City {city_name} not found in dataset")
 
 
+def degrees_to_radians(deg: float) -> float:
+    return deg * math.pi / 180
+
+
+def coords_in_radians(coords: (float, float)) -> (float, float):
+    return tuple(map(degrees_to_radians, coords))
+
+
+def ground_distance(coords1: (float, float), coords2: (float, float)) -> float:
+    return distance.geodesic(coords1, coords2).km
+
+
+def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
+    radius = 6371
+    lat1, lon1 = coords_in_radians(coords1)
+    lat2, lon2 = coords_in_radians(coords2)
+
+    # Calculate the central angle using the sperical law of cosines
+    cos_delta_sigma = math.sin(lat1) * math.sin(lat2) + \
+        math.cos(lat1) * math.cos(lat2) * math.cos(lon2 - lon1)
+
+    # Calculate the chord length
+    chord_len = radius * math.sqrt(2 * (1 - cos_delta_sigma))
+
+    return chord_len
+
+
+def road_distance(city1: str, city2: str) -> float:
+    pass
+
+
 if __name__ == "__main__":
     city = input("Enter name of a city: ")
 
@@ -34,3 +67,15 @@ if __name__ == "__main__":
         print(f"{city} is at {coords}")
     except ValueError:
         print(f"couldn't get {city}'s coordinates")
+
+    city2 = input("\nEnter name of another city: ")
+
+    coords1 = Database.get_coordinates(city)
+    coords2 = Database.get_coordinates(city2)
+
+    print("ground distance b/w them is: {}".format(
+        ground_distance(coords1, coords2)
+    ))
+    print("spatial distance b/w them is: {}".format(
+        spatial_distance(coords1, coords2)
+    ))
