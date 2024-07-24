@@ -1,3 +1,5 @@
 .venv*
 .env
 Whitehole/authtk.txt
+*.pyc
+*__pycache__*

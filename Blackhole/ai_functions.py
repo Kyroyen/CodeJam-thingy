@@ -15,6 +15,18 @@ class A21_Functions:
 
     client = AI21Client(api_key=AI21_API_KEY)
     
+    function_maps = {
+        "simple": "base_get_format_summary",
+        "key" : "key_points_extractor",
+        "bullets":"bullets_points_extractor",
+        "abstract":"abstract_writing_summary",
+        "headline":"headline_maker",
+        "swot":"swot_analyser",
+        "three":"three_sentence_analyser",
+        "qna":"qna_format",
+        "pyramid":"inverted_pyramid_summary",
+    }   
+    
     initial_system_messages = [
         ChatMessage(role = "system", content="You have the spirit of a dead end job worker that is not interested in things"),
         ChatMessage(role = "system", content="You have to summarize the messages in the following format"),
