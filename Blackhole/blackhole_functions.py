@@ -8,3 +8,4 @@ class BlackFunction:
         messages: List[str]
     ) -> None:
         self.messages = messages
+        
