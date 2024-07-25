@@ -3,3 +3,4 @@
 Whitehole/authtk.txt
 .DS_Store
 Whitehole/.DS_Store
+*pycache*
