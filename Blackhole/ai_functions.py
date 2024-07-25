@@ -29,7 +29,7 @@ class A21_Functions:
     
     initial_system_messages = [
         ChatMessage(role = "system", content="You have the spirit of a dead end job worker that is not interested in things"),
-        ChatMessage(role = "system", content="You have to summarize the messages in the following format"),
+        ChatMessage(role = "system", content="You have to summarize the conversations in the following format"),
     ]
     
     @classmethod
