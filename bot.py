@@ -3,8 +3,8 @@ from disnake.ext import commands
 
 from Blackhole.blackhole_functions import BlackFunction
 
-intents = disnake.Intents.default()
-bot = commands.Bot(intents=intents)
+intents = disnake.Intents.all()
+bot = commands.Bot(command_prefix='.',intents=intents)
 
 
 @bot.event
@@ -15,8 +15,10 @@ async def on_ready():
 @bot.command()
 async def summary(ctx, type: str, limit: int = 5):
     messages = await ctx.channel.history(limit=limit).flatten()
-    # messages.reverse()
-    logs = [f"{message.author.name} said  {message.content}." for message in messages]
+    messages.reverse()
+    for message in messages:
+        if message.author.name != bot.user:
+            logs.append(f"{message.author.name} said  {message.content}.")
     
     black_obj = BlackFunction(
         logs
