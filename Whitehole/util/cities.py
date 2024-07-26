@@ -29,6 +29,25 @@ class Database:
 
         except IndexError:
             raise ValueError(f"City {city_name} not found in dataset")
+    @classmethod
+    def get_distance(cls, city_name1: str, city_name2: str, path: str) -> float:
+        city_name1=city_name1.title()
+        city_name2=city_name2.title()
+        if (not cls.does_city_exist(city_name1)):
+            raise ValueError(f"City {city_name1} not found")
+        if (not cls.does_city_exist(city_name2)):
+            raise ValueError(f"City {city_name2} not found")
+        coords1 = cls.get_coordinates(city_name1)
+        coords2 = cls.get_coordinates(city_name2)
+
+        if path == "road":
+            return road_distance(coords1, coords2)
+        elif path == "air":
+            return ground_distance(coords1, coords2)
+        elif path == "ground":
+            return spatial_distance(coords1, coords2)
+        else:
+            raise ValueError("Invalid path type. Choose 'road', 'air', or 'ground'.")
 
 
 def fetch_city_geocode(city: str) -> (float, float):
