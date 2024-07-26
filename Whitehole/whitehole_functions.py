@@ -1,7 +1,7 @@
 from typing import List
 
-from util.scrape_wiki import Scapers
-from util.time_finder import TimerFunction
+from .util.scrape_wiki import Scapers
+from .util.time_finder import TimerFunction
 
 class WhiteFunction:
 

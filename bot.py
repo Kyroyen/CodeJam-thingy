@@ -1,7 +1,7 @@
 import disnake
 from disnake.ext import commands
-from Whitehole.whitehole_functions import WhiteFunction
-from Blackhole.blackhole_functions import BlackFunction
+from Whitehole.whitehole_functions import WhiteFunction 
+#from Blackhole.blackhole_functions import BlackFunction
 
 intents = disnake.Intents.default()
 bot = commands.Bot(intents=intents)
@@ -37,6 +37,20 @@ async def ask(inter, noun: str):
     await inter.followup.send("\n\n".join(response_content))
 
 # Replace 'YOUR_BOT_TOKEN' with your actual bot token
+@bot.slash_command(description="Travel planner between two cities")
+async def travel(inter,cityone,citytwo):
+    citytwo=citytwo.strip()
+    cityone=cityone.strip()
+    await inter.response.defer()
+    try:
+        travel_times=WhiteFunction.findT(cityone,citytwo)
+        formatted_output = '\n'.join([f'- {vehicle}: *{time}*' for vehicle, time in travel_times.items()])
+        await inter.followup.send(f"**Time it will take to travel from {cityone} to {citytwo}:**\n{formatted_output}")
+
+    except ValueError as a:
+        await inter.followup.send(a)
+    
+
 
 
 

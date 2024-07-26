@@ -10,10 +10,9 @@ import os
 dotenv.load_dotenv()
 geolocator = Nominatim(user_agent="CodeJamProject")
 openrouteservice_api_key = os.getenv('OPENROUTESERVICE_API_KEY')
-
-
+print(os.getcwd())
 class Database:
-    df = pd.read_csv("cities dataset/worldcities.csv")
+    df = pd.read_csv("/Users/vibhu/Pyfun/discproj/Project/CodeJam-thingy/Whitehole/util/Dataset/cities.csv")
 
     @classmethod
     def does_city_exist(cls, city_name: str) -> bool:
@@ -31,8 +30,8 @@ class Database:
             raise ValueError(f"City {city_name} not found in dataset")
     @classmethod
     def get_distance(cls, city_name1: str, city_name2: str, path: str) -> float:
-        city_name1=city_name1.title()
-        city_name2=city_name2.title()
+        city_name1=city_name1.lower()
+        city_name2=city_name2.lower()
         if (not cls.does_city_exist(city_name1)):
             raise ValueError(f"City {city_name1} not found")
         if (not cls.does_city_exist(city_name2)):
@@ -86,9 +85,9 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
     return chord_len
 
 
-def road_distance(coords1: (float, float), coords2: (float, float)) -> float | None:
+def road_distance(coords1: (float, float), coords2: (float, float)) -> float or None:
 
-    start_coords = '{},{}'.format(*coords1)
+    """     start_coords = '{},{}'.format(*coords1)
     end_coords = '{},{}'.format(*coords2)
 
     api_url = "https://api.openrouteservice.org/v2/directions/driving-car"
@@ -109,7 +108,8 @@ def road_distance(coords1: (float, float), coords2: (float, float)) -> float | N
 
     except Exception as e:
         print("openrouteservice error:", e)
-        return None
+        return None """
+    return 100
 
 
 if __name__ == "__main__":
@@ -143,3 +143,4 @@ if __name__ == "__main__":
     print("road distance b/w them is: {}".format(
         road_distance(coords1, coords2)
     ))
+    print(Database.get_distance("Delhi","Chennai","air"))
