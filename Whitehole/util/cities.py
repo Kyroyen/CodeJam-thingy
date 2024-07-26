@@ -12,7 +12,7 @@ geolocator = Nominatim(user_agent="CodeJamProject")
 openrouteservice_api_key = os.getenv('OPENROUTESERVICE_API_KEY')
 print(os.getcwd())
 class Database:
-    df = pd.read_csv("/Users/vibhu/Pyfun/discproj/Project/CodeJam-thingy/Whitehole/util/Dataset/cities.csv")
+    df = pd.read_csv("./Dataset/cities.csv")
 
     @classmethod
     def does_city_exist(cls, city_name: str) -> bool:
@@ -87,7 +87,7 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
 
 def road_distance(coords1: (float, float), coords2: (float, float)) -> float or None:
 
-    """     start_coords = '{},{}'.format(*coords1)
+    start_coords = '{},{}'.format(*coords1)
     end_coords = '{},{}'.format(*coords2)
 
     api_url = "https://api.openrouteservice.org/v2/directions/driving-car"
@@ -108,8 +108,7 @@ def road_distance(coords1: (float, float), coords2: (float, float)) -> float or 
 
     except Exception as e:
         print("openrouteservice error:", e)
-        return None """
-    return 100
+        return None
 
 
 if __name__ == "__main__":

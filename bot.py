@@ -1,7 +1,7 @@
 import disnake
 from disnake.ext import commands
 from Whitehole.whitehole_functions import WhiteFunction 
-#from Blackhole.blackhole_functions import BlackFunction
+from Blackhole.blackhole_functions import BlackFunction
 
 intents = disnake.Intents.default()
 bot = commands.Bot(intents=intents)
