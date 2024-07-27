@@ -69,8 +69,8 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
 
 def road_distance(coords1: (float, float), coords2: (float, float)) -> float | None:
 
-    start_coords = '{},{}'.format(*coords1)
-    end_coords = '{},{}'.format(*coords2)
+    start_coords = '{},{}'.format(*coords1[::-1])
+    end_coords = '{},{}'.format(*coords2[::-1])
 
     api_url = "https://api.openrouteservice.org/v2/directions/driving-car"
     params = {
@@ -84,7 +84,6 @@ def road_distance(coords1: (float, float), coords2: (float, float)) -> float | N
     try:
         response = requests.get(url)
         data = response.json()
-        print(data)
         distance = data['features'][0]['properties']['segments'][0]['distance']
         return distance / 1000
 
