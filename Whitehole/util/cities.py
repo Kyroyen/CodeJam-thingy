@@ -10,10 +10,9 @@ import os
 dotenv.load_dotenv()
 geolocator = Nominatim(user_agent="CodeJamProject")
 openrouteservice_api_key = os.getenv('OPENROUTESERVICE_API_KEY')
-
-
+print(os.getcwd())
 class Database:
-    df = pd.read_csv("cities dataset/worldcities.csv")
+    df = pd.read_csv("./Dataset/cities.csv")
 
     @classmethod
     def does_city_exist(cls, city_name: str) -> bool:
@@ -29,6 +28,25 @@ class Database:
 
         except IndexError:
             raise ValueError(f"City {city_name} not found in dataset")
+    @classmethod
+    def get_distance(cls, city_name1: str, city_name2: str, path: str) -> float:
+        city_name1=city_name1.lower()
+        city_name2=city_name2.lower()
+        if (not cls.does_city_exist(city_name1)):
+            raise ValueError(f"City {city_name1} not found")
+        if (not cls.does_city_exist(city_name2)):
+            raise ValueError(f"City {city_name2} not found")
+        coords1 = cls.get_coordinates(city_name1)
+        coords2 = cls.get_coordinates(city_name2)
+
+        if path == "road":
+            return road_distance(coords1, coords2)
+        elif path == "air":
+            return ground_distance(coords1, coords2)
+        elif path == "ground":
+            return spatial_distance(coords1, coords2)
+        else:
+            raise ValueError("Invalid path type. Choose 'road', 'air', or 'ground'.")
 
 
 def fetch_city_geocode(city: str) -> (float, float):
@@ -67,7 +85,7 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
     return chord_len
 
 
-def road_distance(coords1: (float, float), coords2: (float, float)) -> float | None:
+def road_distance(coords1: (float, float), coords2: (float, float)) -> float or None:
 
     start_coords = '{},{}'.format(*coords1[::-1])
     end_coords = '{},{}'.format(*coords2[::-1])
@@ -123,3 +141,4 @@ if __name__ == "__main__":
     print("road distance b/w them is: {}".format(
         road_distance(coords1, coords2)
     ))
+    print(Database.get_distance("Delhi","Chennai","air"))
