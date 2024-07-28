@@ -26,7 +26,6 @@ async def summary(ctx, type: str, limit: int = 15):
         if message.author.name != bot.user:
             logs.append(f"{message.author.name} said  {message.content}.")
     
-    # print(logs)
     
     black_obj = BlackFunction(
         logs
