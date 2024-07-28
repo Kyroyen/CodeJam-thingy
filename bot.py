@@ -3,6 +3,11 @@ from disnake.ext import commands
 from Whitehole.whitehole_functions import WhiteFunction 
 from Blackhole.blackhole_functions import BlackFunction
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 intents = disnake.Intents.all()
 bot = commands.Bot(command_prefix='.',intents=intents)
 
@@ -13,16 +18,20 @@ async def on_ready():
 
 
 @bot.command()
-async def summary(ctx, type: str, limit: int = 5):
+async def summary(ctx, type: str, limit: int = 15):
     messages = await ctx.channel.history(limit=limit).flatten()
     messages.reverse()
+    logs = []
     for message in messages:
         if message.author.name != bot.user:
             logs.append(f"{message.author.name} said  {message.content}.")
     
+    # print(logs)
+    
     black_obj = BlackFunction(
         logs
     )
+    
     
     if type=="random":
         result = black_obj.get_random_summary()
@@ -66,11 +75,7 @@ async def travel(inter,cityone,citytwo):
     except ValueError as a:
         await inter.followup.send(a)
     
-
-
-
-
-
-
-token = open("Whitehole/authtk.txt",'r').read()
+    
+# token = open("Whitehole/authtk.txt",'r').read()
+token = os.environ.get("DISCORD_KEY")
 bot.run(token)

@@ -12,7 +12,7 @@ geolocator = Nominatim(user_agent="CodeJamProject")
 openrouteservice_api_key = os.getenv('OPENROUTESERVICE_API_KEY')
 print(os.getcwd())
 class Database:
-    df = pd.read_csv("./Dataset/cities.csv")
+    df = pd.read_csv("./Whitehole/util/Dataset/cities.csv")
 
     @classmethod
     def does_city_exist(cls, city_name: str) -> bool:
@@ -49,7 +49,7 @@ class Database:
             raise ValueError("Invalid path type. Choose 'road', 'air', or 'ground'.")
 
 
-def fetch_city_geocode(city: str) -> (float, float):
+def fetch_city_geocode(city: str):
     geocode_data = geolocator.geocode(city)
     if geocode_data:
         lat, lon = geocode_data.latitude, geocode_data.longitude
@@ -62,15 +62,15 @@ def degrees_to_radians(deg: float) -> float:
     return deg * math.pi / 180
 
 
-def coords_in_radians(coords: (float, float)) -> (float, float):
+def coords_in_radians(coords):
     return tuple(map(degrees_to_radians, coords))
 
 
-def ground_distance(coords1: (float, float), coords2: (float, float)) -> float:
+def ground_distance(coords1, coords2):
     return distance.geodesic(coords1, coords2).km
 
 
-def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
+def spatial_distance(coords1, coords2) -> float:
     radius = 6371
     lat1, lon1 = coords_in_radians(coords1)
     lat2, lon2 = coords_in_radians(coords2)
@@ -85,7 +85,7 @@ def spatial_distance(coords1: (float, float), coords2: (float, float)) -> float:
     return chord_len
 
 
-def road_distance(coords1: (float, float), coords2: (float, float)) -> float or None:
+def road_distance(coords1, coords2) -> float:
 
     start_coords = '{},{}'.format(*coords1[::-1])
     end_coords = '{},{}'.format(*coords2[::-1])

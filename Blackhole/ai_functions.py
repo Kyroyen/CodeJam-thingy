@@ -45,6 +45,8 @@ class A21_Functions:
         messages = cls.initial_system_messages + \
             [cls.turn_into_message_objects(message=summarization_techique, role = "system")] + \
             user_message_objects
+        
+        print(messages)
             
         chat_completions: ChatCompletionResponse = cls.client.chat.completions.create(
             messages=messages,
