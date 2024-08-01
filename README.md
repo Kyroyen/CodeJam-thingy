@@ -12,7 +12,7 @@ Does the opposite job by spitting out a ton of overloaded information overload.
 Add the bot to your server using the [link](insert invite link here).
 
 #### You can use the following commands:
-- /summarise - summarise the chat
+- .summarise - summarise the chat
 - /ask - Ask the bot about something
 - /travel - Plans travel
 
