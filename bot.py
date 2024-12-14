@@ -23,7 +23,7 @@ async def summary(ctx, type: str, limit: int = 15):
     messages.reverse()
     logs = []
     for message in messages:
-        if message.author.name != bot.user:
+        if message.author.name != str(bot.user)[0:7]:
             logs.append(f"{message.author.name} said  {message.content}.")
     
     
